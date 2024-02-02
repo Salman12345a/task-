@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        background-color: #f9f9f9;
+        text-align: center;
+        margin: 0;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .filter-box {
+        margin: 20px;
+        padding: 15px;
+        background-color: #f0f0f0;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: inline-block;
+      }
+
+      #stateFilter,
+      #classFilter,
+      #channelFilter {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        width: 90px;
+      }
+
+      .custom-button {
+        display: none;
+        background-color: #2ecc71;
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 5px;
+        margin: 10px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease,
+          transform 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .custom-button:hover {
+        background-color: #27ae60;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
+      }
+
+      @media screen and (max-width: 788px) {
+        .wrapper {
+          position: relative;
+          width: 94%;
+          max-width: 800px;
+          height: 350px;
+          background: transparent/center;
+          border: 2px solid rgba(31, 30, 30, 0.5);
+          border-radius: 20px;
+          backdrop-filter: blur(20px);
+          box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+          margin-top: 30px;
+          margin-left: auto;
+          margin-right: auto;
+          overflow: hidden;
+        }
+
+        .container {
+          position: relative;
+          z-index: 2;
+          margin-top: 30px;
+          width: 91%;
+        }
+
+        #stateFilter {
+          margin-top: 10px;
+          width: calc(100% - 50px);
+          line-height: 1.5;
+        }
+
+        #classFilter {
+          margin-top: 10px;
+          width: calc(100% - 50px);
+          line-height: 1.5;
+        }
+
+        #channelFilter {
+          margin-top: 10px;
+          width: calc(100% - 50px);
+          line-height: 1.5;
+          margin-bottom: 10px;
+          margin-left: 11px;
+        }
+
+        #text {
+          display: flex;
+          color: #000000;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          margin-top: 8px;
+        }
+
+        #text1 {
+          display: flex;
+          color: #000000;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          margin-top: 1px;
+        }
+      }
+
+      #submitButton {
+        background-color: rgb(16, 196, 40);
+        color: white;
+        padding: 5px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 7px;
+        margin-bottom: 1px;
+      }
+
+      #submitButton:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="background-container">
+      <div class="wrapper">
+        <label for="stateFilter" id="text">Select Unit:</label>
+        <select id="stateFilter">
+          <option value="unit1">unit1</option>
+          <option value="unit2">unit2</option>
+          <option value="unit3">unit3</option>
+          <option value="unit4">unit4</option>
+          <option value="unit5">unit5</option>
+        </select>
+
+        <label for="classFilter" id="text1">Select Content:</label>
+        <select id="classFilter">
+          <option value="note">Note's</option>
+          <option value="video">Video's</option>
+          <option value="pvq">previous year question</option>
+        </select>
+
+        <label for="channelFilter" id="channelFilterLabel"
+          >Select Channel:</label
+        >
+        <select id="channelFilter" class="tex">
+          <option value="cha0">click this for notes</option>
+          <option value="cha1">Telugu Channel(1)</option>
+          <option value="cha2">Telugu Channel(2)</option>
+          <option value="cha3">Hindi Channel(1)</option>
+          <option value="cha4">Hindi Channel(2)</option>
+        </select>
+
+        <button id="submitButton">Submit</button>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("submitButton")
+        .addEventListener("click", function () {
+          var selectedstate = document.getElementById("stateFilter").value;
+          var selectedClass = document.getElementById("classFilter").value;
+          var selectedchannel = document.getElementById("channelFilter").value;
+
+          // Retrieve previous filter values from localStorage
+          var storedstate = localStorage.getItem("selectedstate");
+          var storedClass = localStorage.getItem("selectedClass");
+          var storedchannel = localStorage.getItem("selectedchannel");
+
+          // Check if the filter values have changed
+          if (
+            selectedstate !== storedstate ||
+            selectedClass !== storedClass ||
+            selectedchannel !== storedchannel
+          ) {
+            // Store selected filters in localStorage
+            localStorage.setItem("selectedstate", selectedstate);
+            localStorage.setItem("selectedClass", selectedClass);
+            localStorage.setItem("selectedchannel", selectedchannel);
+          }
+
+          // Check if all filter values are not empty
+          if (
+            selectedstate !== "" &&
+            selectedClass !== "" &&
+            selectedchannel !== ""
+          ) {
+            // Check if there are buttons matching the filter criteria
+            var buttons = document.querySelectorAll(
+              '.custom-button[data-state="' +
+                selectedstate +
+                '"][data-class="' +
+                selectedClass +
+                '"][data-channel="' +
+                selectedchannel +
+                '"]'
+            );
+
+            if (buttons.length > 0) {
+              window.open(buttons[0].getAttribute("href"), "_blank");
+            } else {
+              // Alert the user for an invalid filter selection
+              alert("Invalid  selection. pls select properly.");
+            }
+          } else {
+            // Alert the user for incomplete filter selection
+            alert("Please select values for all filters.");
+          }
+        });
+
+      // Set the initial values of filters from localStorage
+      document.getElementById("stateFilter").value =
+        localStorage.getItem("selectedstate") || "";
+      document.getElementById("classFilter").value =
+        localStorage.getItem("selectedClass") || "";
+      document.getElementById("channelFilter").value =
+        localStorage.getItem("selectedchannel") || "";
+    </script>
+
+    <!-- videos for unit 1 -->
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmVheQA7H689mwA9ubjeLT9P&si=IyJ7Cr2y8nDXKR3l"
+      class="custom-button"
+      target="_blank"
+      data-state="unit1"
+      data-class="video"
+      data-channel="cha1"
+      >Unit 1</a
+    >
+
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmXJmEn9rGgbqRQ2BpJe2Tc9&si=2C5mw614Md9r-ZcU"
+      class="custom-button"
+      target="_blank"
+      data-state="unit1"
+      data-class="video"
+      data-channel="cha2"
+      >Unit 1</a
+    >
+
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmVAOL1qkXogU8f_dzN1kz3z&si=vGVe_AGkwbRQkeHV"
+      class="custom-button"
+      target="_blank"
+      data-state="unit1"
+      data-class="video"
+      data-channel="cha3"
+      >Unit 1</a
+    >
+
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmX1rnXZntBwdqaYO1qKE87A&si=IOjs4pJPpB1IAWyt"
+      class="custom-button"
+      target="_blank"
+      data-state="unit1"
+      data-class="video"
+      data-channel="cha4"
+      >Unit 1</a
+    >
+
+    <!-- videos for unit 2 -->
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmUdRcEGwT8Lq340dRnZmQTk&si=9VVSyRoOT9PRRXPz"
+      class="custom-button"
+      target="_blank"
+      data-state="unit2"
+      data-class="video"
+      data-channel="cha1"
+      >Unit 2</a
+    >
+
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmUwvFu9iVCXUGKgXoSb-x8s&si=d2x0dDQOSjPJ89dd"
+      class="custom-button"
+      target="_blank"
+      data-state="unit2"
+      data-class="video"
+      data-channel="cha2"
+      >Unit 2</a
+    >
+
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmVDTTYOfmlAANsomFJbj8I5&si=Bct5T4WoXv6yAshz"
+      class="custom-button"
+      target="_blank"
+      data-state="unit2"
+      data-class="video"
+      data-channel="cha3"
+      >Unit 2</a
+    >
+
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmWtGvpaf8X4-usrOfD9Rg5O&si=H53adP8TCCJTOjcw"
+      class="custom-button"
+      target="_blank"
+      data-state="unit2"
+      data-class="video"
+      data-channel="cha4"
+      >Unit 2</a
+    >
+
+    <!-- videos for unit 3 -->
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmU63NnrQ3vMuswzGuWRRn6K&si=CA6tg11VMROavzIO"
+      class="custom-button"
+      target="_blank"
+      data-state="unit3"
+      data-class="video"
+      data-channel="cha1"
+      >Unit 3</a
+    >
+
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmV8tTwxsERwesdQ-iyzTT8L&si=F0NcQUD_hb6fa5Q9"
+      class="custom-button"
+      target="_blank"
+      data-state="unit3"
+      data-class="video"
+      data-channel="cha2"
+      >Unit 3</a
+    >
+
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmUFFIvRzKNQHMP2qcCuD57H&si=ibq_Ub2al1FMN8VJ"
+      class="custom-button"
+      target="_blank"
+      data-state="unit3"
+      data-class="video"
+      data-channel="cha3"
+      >Unit 3</a
+    >
+
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmUUvcepo9U6MdCuQ1Z1cjYo&si=1lIuJkPQqo8m5lDx"
+      class="custom-button"
+      target="_blank"
+      data-state="unit3"
+      data-class="video"
+      data-channel="cha4"
+      >Unit 3</a
+    >
+
+    <!-- videos for unit 4 -->
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmU2HQbGBPCVDWSt26GSLIWM&si=B2ZroniOP2SOC3Cp"
+      class="custom-button"
+      target="_blank"
+      data-state="unit4"
+      data-class="video"
+      data-channel="cha1"
+      >Unit 4</a
+    >
+
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmX6jQppwLZa5PKSImNe1-Jw&si=xcvotx6WK5E4dtuu"
+      class="custom-button"
+      target="_blank"
+      data-state="unit4"
+      data-class="video"
+      data-channel="cha2"
+      >Unit 4</a
+    >
+
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmUghfVKPq6FD_tKyGg9dc2R&si=cNZoWsw8ic1lAZ_Q"
+      class="custom-button"
+      target="_blank"
+      data-state="unit4"
+      data-class="video"
+      data-channel="cha3"
+      >Unit 4</a
+    >
+
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmUTizBTFNGRDaKsabdYBIvW&si=8bOswhMEixkBQVhd"
+      class="custom-button"
+      target="_blank"
+      data-state="unit4"
+      data-class="video"
+      data-channel="cha4"
+      >Unit 4</a
+    >
+
+    <!-- videos for unit 5 -->
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmXHbrcBC4Ak2F5hXPfKnzSI&si=-PI6IHNp4EzocWcW"
+      class="custom-button"
+      target="_blank"
+      data-state="unit5"
+      data-class="video"
+      data-channel="cha1"
+      >Unit 5</a
+    >
+
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmWGNuLOy1YsbAmQOWPtegYd&si=Lrr-LCYLpCzbp4wi"
+      class="custom-button"
+      target="_blank"
+      data-state="unit5"
+      data-class="video"
+      data-channel="cha2"
+      >Unit 5</a
+    >
+
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmUXuCJoZx4ltjIEDhwFzYS_&si=3EpBPlTne0EmYRmw"
+      class="custom-button"
+      target="_blank"
+      data-state="unit5"
+      data-class="video"
+      data-channel="cha3"
+      >Unit 5</a
+    >
+
+    <a
+      href="https://youtube.com/playlist?list=PLsMvocdbqSmVVaZ-M100AvZawu0vLqoSv&si=ODkaFSgcGvDkfXXh"
+      class="custom-button"
+      target="_blank"
+      data-state="unit5"
+      data-class="video"
+      data-channel="cha4"
+      >Unit 5</a
+    >
+
+    <!-- lecture notes -->
+
+    <!-- Unit 1 -->
+    <a
+      href="https://moodbanao.net/wp-content/uploads/2024/01/FLAT-Unit-1.pdf"
+      class="custom-button"
+      target="_blank"
+      data-state="unit1"
+      data-class="note"
+      data-channel="cha0"
+      >Unit 1</a
+    >
+
+    <!--Unit 2-->
+    <a
+      href="https://moodbanao.net/wp-content/uploads/2024/01/FLAT-Unit-2.pdf"
+      class="custom-button"
+      target="_blank"
+      data-state="unit2"
+      data-class="note"
+      data-channel="cha0"
+      >Unit 2</a
+    >
+
+    <!--Unit 3-->
+    <a
+      href="https://moodbanao.net/wp-content/uploads/2024/01/FLAT-unit3.pdf"
+      class="custom-button"
+      target="_blank"
+      data-state="unit3"
+      data-class="note"
+      data-channel="cha0"
+      >Unit 3</a
+    >
+
+    <!--Unit 4-->
+    <a
+      href="https://moodbanao.net/wp-content/uploads/2024/01/unit-4-flat-notes.pdf"
+      class="custom-button"
+      target="_blank"
+      data-state="unit4"
+      data-class="note"
+      data-channel="cha0"
+      >Unit 4</a
+    >
+
+    <!--Unit 5-->
+    <a
+      href="https://moodbanao.net/wp-content/uploads/2024/01/FLAT-UNIT-5.pdf"
+      class="custom-button"
+      target="_blank"
+      data-state="unit5"
+      data-class="note"
+      data-channel="cha0"
+      >Unit 5</a
+    >
+
+    <!-- previou year qustion paper -->
+
+    <a
+      href="https://moodbanao.net/wp-content/uploads/2024/01/FLATPVQS.pdf"
+      class="custom-button"
+      target="_blank"
+      data-state="unit1"
+      data-class="pvq"
+      data-channel="cha0"
+      >Unit 1</a
+    >
+
+    <a
+      href="https://moodbanao.net/wp-content/uploads/2024/01/FLATPVQS.pdf"
+      class="custom-button"
+      target="_blank"
+      data-state="unit2"
+      data-class="pvq"
+      data-channel="cha0"
+      >Unit 2</a
+    >
+
+    <a
+      href="https://moodbanao.net/wp-content/uploads/2024/01/FLATPVQS.pdf"
+      class="custom-button"
+      target="_blank"
+      data-state="unit3"
+      data-class="pvq"
+      data-channel="cha0"
+      >Unit 3</a
+    >
+
+    <a
+      href="https://moodbanao.net/wp-content/uploads/2024/01/FLATPVQS.pdf"
+      class="custom-button"
+      target="_blank"
+      data-state="unit4"
+      data-class="pvq"
+      data-channel="cha0"
+      >Unit 4</a
+    >
+
+    <a
+      href="https://moodbanao.net/wp-content/uploads/2024/01/FLATPVQS.pdf"
+      class="custom-button"
+      target="_blank"
+      data-state="unit5"
+      data-class="pvq"
+      data-channel="cha0"
+      >Unit 5</a
+    >
+  </body>
+</html>
